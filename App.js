@@ -13,6 +13,7 @@ export default function App() {
   const [newCod, setNewCod] = useState(null);
   const [zoom, setZoom] = useState(0.1);
   const [newEdgeColor, setNewEdgeColor] = useState('white');
+  const [colorLightButton, setColorLightButton] = useState('white');
 
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -126,6 +127,11 @@ export default function App() {
     }
   }
 
+  function light() {
+    setRnFlashMode(rnFlashMode === RNCamera.Constants.FlashMode.off ?  RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off);
+    setColorLightButton(colorLightButton === 'white' ? 'orange' : 'white');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -155,14 +161,14 @@ export default function App() {
 
         <View style={{position: 'absolute', top: "5%" }}>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30}} onPress={() => setRnFlashMode(rnFlashMode === RNCamera.Constants.FlashMode.off ?  RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off)}>
-              <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="flashlight-outline" size={40} color="white" />
-              <Text style={{justifyContent: 'center', alignSelf: 'center', color: 'white'}}>On/Off</Text>
+            <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30}} onPress={light}>
+              <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="flashlight-outline" size={40} color={colorLightButton} />
+              <Text style={{justifyContent: 'center', alignSelf: 'center', color: colorLightButton}}>On/Off</Text>
             </TouchableOpacity>
                         
             <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30 }} onPress={openModal}>
-              <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="barcode-outline" size={40} color="white" />
-              <Text style={{justifyContent: 'center', alignSelf: 'center', color: 'white'}}>{codigos.length}/{quantidade}</Text>
+              <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="barcode-outline" size={40} color={codigos.length >= quantidade ? "green" : "white"} />
+              <Text style={{justifyContent: 'center', alignSelf: 'center', color:codigos.length >= quantidade ? "green" : "white" }}>{codigos.length}/{quantidade}</Text>
             </TouchableOpacity>
           </View>
         </View>
