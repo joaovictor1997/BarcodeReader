@@ -148,7 +148,7 @@ export default function App() {
         }}
         onGoogleVisionBarcodesDetected={scanned ? undefined : ({ barcodes }) => {handleBarCodeScanned(barcodes)}}
       >
-        <BarcodeMask height={barmaskHeight} width={barmaskWidth} />
+        <BarcodeMask height={barmaskHeight} showAnimatedLine={false} width={barmaskWidth} />
 
         <View style={{position: 'absolute', top: "5%" }}>
           <View style={{flexDirection: 'row'}}>
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     height: 35,
     backgroundColor: "#eee",
     borderRadius: 4,
-    paddingVertical: 5,
+    padding: 5,
     borderWidth: 1,
     borderColor:"#eee"
   },
