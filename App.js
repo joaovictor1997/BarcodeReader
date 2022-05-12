@@ -11,6 +11,7 @@ export default function App() {
   const [modalLidos, setModalLidos] = useState(false);
   const [rnFlashMode, setRnFlashMode] = useState(RNCamera.Constants.FlashMode.off);
   const [newCod, setNewCod] = useState(null);
+  const [zoom, setZoom] = useState(0.1);
 
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -29,7 +30,6 @@ export default function App() {
       console.log('failed to load the sound', error);
       return;
     }
-    // when loaded successfully
     console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());
   });
 
@@ -81,7 +81,7 @@ export default function App() {
   }
   
   async function handleBarCodeScanned(codebar) {
-    let barras = codebar[0]
+    let barras = codebar[0];
     if(barras !== undefined) {
       let codigo = String(barras.data);
       let x = Number(barras.bounds.origin.x);
@@ -113,6 +113,16 @@ export default function App() {
     setScanned(false);
   }
 
+  function changeZoom(change) {
+    if(change === 'positive') {
+      if(zoom >= 1) return;
+      setZoom(zoom + 0.1)
+    }else {
+      if(zoom <= 0.1) return;
+      setZoom(zoom - 0.1)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -121,6 +131,7 @@ export default function App() {
       />
       <RNCamera
         style={styles.preview}
+        zoom={zoom}
         type={RNCamera.Constants.Type.back}
         flashMode={rnFlashMode}
         androidCameraPermissionOptions={{
@@ -139,7 +150,7 @@ export default function App() {
       >
         <BarcodeMask height={barmaskHeight} width={barmaskWidth} />
 
-        <View style={{position: 'absolute', top: 40 }}>
+        <View style={{position: 'absolute', top: "5%" }}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30}} onPress={() => setRnFlashMode(rnFlashMode === RNCamera.Constants.FlashMode.off ?  RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off)}>
               <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="flashlight-outline" size={40} color="white" />
@@ -149,6 +160,20 @@ export default function App() {
             <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30 }} onPress={openModal}>
               <Icon style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="barcode-outline" size={40} color="white" />
               <Text style={{justifyContent: 'center', alignSelf: 'center', color: 'white'}}>{codigos.length}/{quantidade}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={{position: 'absolute', bottom: "30%"}}>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30}} onPress={() => changeZoom('positive')}>
+              <MaterialIcons style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="zoom-in" size={40} color="white" />
+              <Text style={{justifyContent: 'center', alignSelf: 'center', color: 'white'}}>Zoom In</Text>
+            </TouchableOpacity>
+                        
+            <TouchableOpacity title='teste' style={{ width: 120, height: 50, marginHorizontal: 30 }} onPress={() => changeZoom('negative')}>
+              <MaterialIcons style={{justifyContent: 'center', alignSelf: 'center', marginTop: 7}} name="zoom-out" size={40} color="white" />
+              <Text style={{justifyContent: 'center', alignSelf: 'center', color: 'white'}}>Zoom Out</Text>
             </TouchableOpacity>
           </View>
         </View>
