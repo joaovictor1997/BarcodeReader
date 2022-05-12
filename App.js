@@ -12,6 +12,7 @@ export default function App() {
   const [rnFlashMode, setRnFlashMode] = useState(RNCamera.Constants.FlashMode.off);
   const [newCod, setNewCod] = useState(null);
   const [zoom, setZoom] = useState(0.1);
+  const [newEdgeColor, setNewEdgeColor] = useState('white');
 
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -94,9 +95,11 @@ export default function App() {
           setScanned(true);
           Vibration.vibrate();
           salvarCodigos(codigo); 
+          setNewEdgeColor("green");
 
           setTimeout(() => {
-            setScanned(false)
+            setScanned(false);
+            setNewEdgeColor("white");
           }, 500);
         }
       }
@@ -148,7 +151,7 @@ export default function App() {
         }}
         onGoogleVisionBarcodesDetected={scanned ? undefined : ({ barcodes }) => {handleBarCodeScanned(barcodes)}}
       >
-        <BarcodeMask height={barmaskHeight} showAnimatedLine={false} width={barmaskWidth} />
+        <BarcodeMask height={barmaskHeight} edgeColor={newEdgeColor} showAnimatedLine={false} width={barmaskWidth} />
 
         <View style={{position: 'absolute', top: "5%" }}>
           <View style={{flexDirection: 'row'}}>
@@ -180,8 +183,8 @@ export default function App() {
 
         { codigos.length >= quantidade &&
           <View style={{position: 'absolute', bottom: 15, right: 15 }}>
-            <TouchableOpacity style={{backgroundColor: '#2E8B57', width: 60, height: 50, borderRadius: 20 }}>
-              <Icon style={{justifyContent: 'center', alignSelf: 'center' }} name="checkmark-outline" size={40} color="white" />
+            <TouchableOpacity style={{backgroundColor: '#2E8B57', width: 70, height: 50, borderRadius: 20 }}>
+              <Text style={{textAlign: 'center', textAlignVertical: 'center', marginTop: 12, fontSize: 16, fontWeight: '500', color: 'white' }}>Finalizar</Text>
             </TouchableOpacity>
           </View>
         }
